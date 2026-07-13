@@ -237,7 +237,7 @@ const submitContactForm = () => {
             Công ty TNHH TM DV Kỹ thuật Đại Phúc là doanh nghiệp chuyên cung cấp các giải pháp công nghệ thông tin, phát triển ứng dụng và dịch vụ gia công phần mềm. Công ty chủ yếu tập trung vào việc hỗ trợ chuyển đổi số và tối ưu hóa quy trình hoạt động cho các đối tác khách hàng trên thị trường.
           </p>
           <div class="about-brand-tagline">
-            Đại Phúc: Công nghệ kết nối tự nhiên
+            Giải pháp tối ưu, Khởi nguyên thịnh vượng
           </div>
           <button class="btn-sage-pill" @click="showContactModal = true">
             Liên hệ hợp tác
