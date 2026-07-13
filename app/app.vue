@@ -199,7 +199,10 @@ const submitContactForm = () => {
       <header class="top-logo-bar">
         <a href="#" class="brand-logo-link" @click.prevent="scrollToSection('about')">
           <img src="/logo.png?v=2" alt="Đại Phúc Logo" class="logo-image-top" />
-          <span>DAI PHUC</span>
+          <div class="logo-text-group">
+            <span class="logo-brand-name">DAI PHUC</span>
+            <span class="logo-slogan">Giải pháp tối ưu, Khởi nguyên thịnh vượng</span>
+          </div>
         </a>
         
         <nav class="top-nav-menu">
@@ -237,7 +240,7 @@ const submitContactForm = () => {
             Công ty TNHH TM DV Kỹ thuật Đại Phúc là doanh nghiệp chuyên cung cấp các giải pháp công nghệ thông tin, phát triển ứng dụng và dịch vụ gia công phần mềm. Công ty chủ yếu tập trung vào việc hỗ trợ chuyển đổi số và tối ưu hóa quy trình hoạt động cho các đối tác khách hàng trên thị trường.
           </p>
           <div class="about-brand-tagline">
-            Giải pháp tối ưu, Khởi nguyên thịnh vượng
+            Đại Phúc: Công nghệ kết nối tự nhiên
           </div>
           <button class="btn-sage-pill" @click="showContactModal = true">
             Liên hệ hợp tác

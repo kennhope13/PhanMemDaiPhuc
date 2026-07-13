@@ -313,18 +313,32 @@ body {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   text-decoration: none;
-  line-height: 1;
 }
 
-.brand-logo-link span {
+.logo-text-group {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 1.25;
+}
+
+.logo-brand-name {
   font-family: var(--font-sans);
   font-size: 22px;
   font-weight: 800;
   letter-spacing: 0.18em;
   color: var(--primary-color);
   text-transform: uppercase;
+}
+
+.logo-slogan {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted-foreground);
+  letter-spacing: 0.02em;
 }
 
 .logo-image-top {
