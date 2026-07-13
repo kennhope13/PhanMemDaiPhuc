@@ -380,6 +380,7 @@ body {
     width: 100%;
     justify-content: flex-start;
     gap: 4px;
+    margin-left: -12px; /* Shift left to align active pill edge with the logo */
   }
   
   .top-nav-link {
