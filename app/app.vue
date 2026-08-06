@@ -10,7 +10,10 @@ import {
   Send,
   CheckCircle,
   Monitor,
-  Server
+  Server,
+  Package,
+  Cpu,
+  ShieldCheck
 } from 'lucide-vue-next'
 
 useHead({
@@ -45,6 +48,62 @@ const masterStationInfo = ref({
   fileName: 'Master.Station.Setup.3.0.10.exe',
   downloadUrl: 'https://github.com/kennhope13/Master-Station/releases/download/v3.0.10/Master.Station.Setup.3.0.10.exe'
 })
+
+const activeProductCategory = ref('all')
+
+const hardwareTabs = [
+  { id: 'web1', label: 'Web 1' },
+  { id: 'web2', label: 'Web 2' },
+  { id: 'web3', label: 'Web 3' }
+]
+
+const hardwareProducts = ref([
+  {
+    id: 1,
+    category: 'web1',
+    name: 'Switch Extreme L2 X435-24T-4S',
+    price: '80.000.000 VNĐ',
+    description: 'Thiết bị chuyển mạch ExtremeSwitching™ X435-24T-4S:\n• 24 x 10/100/1000BASE-T access ports. Full / Half-Duplex (auto-sensing)\n• 4 x 1/2.5GBASE-X SFP uplink ports (unpopulated)\n• 1 x AC PSU\n• 1 x 10/100/1000BASE-T out-of-band management port\n• 1 x USB A port for external USB flash',
+    icon: 'Package',
+    image: '/images/switch_extreme_24t_1785992540748.jpg'
+  },
+  {
+    id: 2,
+    category: 'web1',
+    name: 'Switch Extreme L2 X435-24P-4S',
+    price: '45.000.000 VNĐ',
+    description: 'Thiết bị chuyển mạch ExtremeSwitching™ X435-24P-4S:\n• 24 x 10/100/1000BASE-T 802.3at (30W) PoE ports. Full / Half-Duplex\n• 4 x 1/2.5GBASE-X SFP uplink ports (unpopulated)\n• 1 x AC PSU\n• 1 x 10/100/1000BASE-T out-of-band management port\n• 1 x USB A port for external USB flash',
+    icon: 'Package',
+    image: '/images/switch_extreme_24p_1785992572960.jpg'
+  },
+  {
+    id: 3,
+    category: 'web2',
+    name: 'Firewall SonicWall NS 5800',
+    price: '2.120.000.000 VNĐ',
+    description: '24x1GbE, 8x10G SFP+, 2 USB 3.0, 1 Console RJ-45, 1 Mgmt port.\nFirewall Inspection Throughput: 30 Gbps\nIPS Throughput: 24 Gbps\nVPN Throughput: 21 Gbps\nMaximum Connections: 8,000,000\nStorage: 256 GB (Up to 1 TB)',
+    icon: 'ShieldCheck',
+    image: '/images/firewall_sonicwall_1785992634226.jpg'
+  },
+  {
+    id: 4,
+    category: 'web3',
+    name: 'Switch Juniper EX4100-24P',
+    price: '283.000.000 VNĐ',
+    description: '24 cổng 10/100/1000BASE-T PoE+\n4 cổng 10GbE SFP+ Uplink\n4 cổng 25GbE SFP28 Stacking/Uplink\nCông suất PoE: 740 W/1440 W\nNăng lực chuyển mạch: 328 Gbps\nTốc độ chuyển tiếp gói: 244 Mpps\nNguồn JPSU-920-AC-AFO',
+    icon: 'Package',
+    image: '/images/switch_juniper_1785992643984.jpg'
+  },
+  {
+    id: 5,
+    category: 'web3',
+    name: 'INVERTER 3KVA-110VDC/220VAC',
+    price: '35.000.000 VNĐ',
+    description: 'Mã sản phẩm: IPS-DTA3000-1102-2U\n- Wave shape: Pure Sine Wave\n- DC Rate Input: 110VDC\n- Working voltage range: 90~145VDC\n- AC Output: 220V 50Hz/60Hz\n- Rate Capacity: 3000VA, 2400W\n- Mounting: 19 inch 1U Rack Type',
+    icon: 'Cpu',
+    image: '/images/inverter_3kva_1785992656662.jpg'
+  }
+])
 
 onMounted(async () => {
   // Fetch Station Monitor latest release
@@ -97,24 +156,50 @@ const toggleMobileMenu = () => {
 
 const scrollToSection = (id) => {
   isMobileMenuOpen.value = false
-  activeTab.value = id
   
   if (id === 'contact') {
     showContactModal.value = true
     return
   }
   
-  const element = document.getElementById(id)
-  if (element) {
-    const headerOffset = 120
-    const elementPosition = element.getBoundingClientRect().top
-    const offsetPosition = elementPosition + window.pageYOffset - headerOffset
+  activeTab.value = id
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  })
+}
 
-    window.scrollTo({
-      top: offsetPosition,
-      behavior: 'smooth'
-    })
+const formatDescription = (desc) => {
+  if (!desc) return '';
+  const lines = desc.split('\n');
+  let html = '';
+  let inList = false;
+  
+  lines.forEach(line => {
+    line = line.trim();
+    if (line.startsWith('•') || line.startsWith('-')) {
+      if (!inList) {
+        html += '<ul class="hw-feature-list">';
+        inList = true;
+      }
+      const content = line.substring(1).trim();
+      html += `<li>${content}</li>`;
+    } else {
+      if (inList) {
+        html += '</ul>';
+        inList = false;
+      }
+      if (line) {
+        html += `<p class="hw-desc-paragraph">${line}</p>`;
+      }
+    }
+  });
+  
+  if (inList) {
+    html += '</ul>';
   }
+  
+  return html;
 }
 
 const downloadedFile = ref('')
@@ -193,7 +278,7 @@ const submitContactForm = () => {
 
 
     <!-- Main Content Area -->
-    <main class="page-split-layout">
+    <main class="main-content-scrollable">
       
       <!-- Top Branding & Navigation -->
       <header class="top-logo-bar">
@@ -230,11 +315,11 @@ const submitContactForm = () => {
         </nav>
       </header>
 
-      <!-- Split Grid Container -->
-      <div class="split-grid-container">
+      <!-- Single View Container (replaces Split Grid) -->
+      <div class="single-view-container">
         
-        <!-- Left Side: Introduction (Giới thiệu) -->
-        <section id="about" class="split-left-about">
+        <!-- Introduction (Giới thiệu) View -->
+        <section id="about" class="view-section" v-show="activeTab === 'about'">
           <h1 class="about-title">Công ty TNHH TM DV Kỹ thuật Đại Phúc</h1>
           <p class="about-desc">
             Công ty TNHH TM DV Kỹ thuật Đại Phúc là doanh nghiệp chuyên cung cấp các giải pháp công nghệ thông tin, phát triển ứng dụng và dịch vụ gia công phần mềm. Công ty chủ yếu tập trung vào việc hỗ trợ chuyển đổi số và tối ưu hóa quy trình hoạt động cho các đối tác khách hàng trên thị trường.
@@ -247,13 +332,34 @@ const submitContactForm = () => {
           </button>
         </section>
 
-        <!-- Right Side: Products (Sản phẩm) -->
-        <section id="product" class="split-right-products">
+        <!-- Products (Sản phẩm) View -->
+        <section id="product" class="view-section" v-show="activeTab === 'product'">
           <div class="product-section-header">
-            <h2 class="product-section-title">Sản phẩm của chúng tôi</h2>
+            <h2 class="product-section-title">Sản phẩm</h2>
+            
+            <div class="category-tabs" v-show="false">
+              <!-- 
+                Hiding the software tab as per user request. 
+                Just change v-show to true to unhide it later.
+              -->
+              <button 
+                class="category-tab" 
+                :class="{ active: activeProductCategory === 'software' }"
+                @click="activeProductCategory = 'software'"
+              >
+                Phần mềm
+              </button>
+              <button 
+                class="category-tab" 
+                :class="{ active: activeProductCategory === 'all' }"
+                @click="activeProductCategory = 'all'"
+              >
+                Tất cả phần cứng
+              </button>
+            </div>
           </div>
 
-          <div class="product-cards-stack">
+          <div class="product-cards-stack" v-if="activeProductCategory === 'software'">
             <!-- Shield Card 1 -->
             <div class="organic-shield-card">
               <div class="card-icon-wrapper">
@@ -298,10 +404,29 @@ const submitContactForm = () => {
               </a>
             </div>
           </div>
+          
+          <div class="product-grid hardware-grid" v-else>
+            <div v-for="product in hardwareProducts" :key="product.id" class="hardware-card">
+              <div v-if="product.image" class="hw-card-image-wrapper">
+                <img :src="product.image" :alt="product.name" class="hw-card-image" />
+              </div>
+              <div class="hw-card-header">
+                <div style="flex-grow: 1;"></div>
+                <div class="hw-price-tag">{{ product.price }}</div>
+              </div>
+              <h3 class="hw-card-title">{{ product.name }}</h3>
+              <div class="hw-card-desc" v-html="formatDescription(product.description)"></div>
+              <button class="btn-sage-pill btn-full mt-auto" @click="showContactModal = true; formMsg = `Tôi quan tâm đến sản phẩm ${product.name}. Xin tư vấn thêm.`">
+                Nhận báo giá
+              </button>
+            </div>
+          </div>
         </section>
       </div>
+    </main>
 
-      <!-- Minimalist Footer (Always at the bottom) -->
+    <!-- Minimalist Footer (Always at the bottom) -->
+    <div class="footer-wrapper">
       <footer class="footer-bar-minimal">
         <div class="footer-copyright">
           © 2026 Đại Phúc Technology. Bảo lưu mọi quyền.
@@ -319,8 +444,7 @@ const submitContactForm = () => {
           </a>
         </div>
       </footer>
-
-    </main>
+    </div>
 
     <!-- Success Toast Notification -->
     <transition name="fade">
@@ -395,6 +519,50 @@ const submitContactForm = () => {
 </template>
 
 <style scoped>
+.main-content-scrollable {
+  flex-grow: 1;
+  padding: 32px 0 32px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.footer-wrapper {
+  width: 100%;
+  max-width: 1200px;
+  margin: auto auto 24px auto;
+  padding: 0 24px;
+}
+
+.single-view-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.view-section {
+  animation: fade-in 0.4s ease forwards;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Override left alignment for about text when in center view */
+#about {
+  text-align: center;
+  align-items: center;
+  max-width: 800px;
+  margin: 60px auto;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .site-root-container {
   display: flex;
   flex-direction: column;
@@ -407,6 +575,144 @@ const submitContactForm = () => {
   gap: 40px;
   flex-wrap: wrap;
   width: 100%;
+}
+
+.category-tabs {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  background-color: rgba(255,255,255,0.5);
+  padding: 6px;
+  border-radius: 100px;
+  box-shadow: inset 0 2px 10px rgba(0,0,0,0.03);
+}
+
+.category-tab {
+  background: transparent;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 100px;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 14px;
+  color: #556257;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.category-tab.active {
+  background-color: #fff;
+  color: var(--primary-color);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.hardware-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+  width: 100%;
+  animation: fade-in-up 0.5s ease forwards;
+}
+
+.hardware-card {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid var(--border-color);
+  border-radius: 24px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.hardware-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+  border-color: rgba(45, 58, 49, 0.2);
+}
+
+.hw-card-image-wrapper {
+  width: 100%;
+  height: 220px;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 8px;
+  background-color: #f5f5f5;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.hw-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.hardware-card:hover .hw-card-image {
+  transform: scale(1.05);
+}
+
+.hw-card-header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  margin-top: -15px;
+}
+
+.hw-price-tag {
+  background-color: #C15E4B;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 100px;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+}
+
+.hw-card-title {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  color: var(--text-color);
+  line-height: 1.3;
+}
+
+.hw-card-desc {
+  font-size: 14px;
+  color: #556257;
+  line-height: 1.6;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+:deep(.hw-desc-paragraph) {
+  margin: 0;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+:deep(.hw-feature-list) {
+  margin: 0;
+  padding-left: 20px;
+  list-style-type: disc;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+:deep(.hw-feature-list li) {
+  padding-left: 4px;
+}
+
+.mt-auto {
+  margin-top: auto;
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* Modal specific styles */
