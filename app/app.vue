@@ -20,8 +20,8 @@ useHead({
   title: 'Công ty phần mềm Đại Phúc',
   meta: [
     { name: 'description', content: 'Công ty phần mềm Đại Phúc là doanh nghiệp chuyên cung cấp các giải pháp công nghệ thông tin, phát triển ứng dụng và dịch vụ gia công phần mềm.' },
-    { property: 'og:title', content: 'Đại Phúc' },
-    { property: 'og:description', content: 'Tải phần mềm Station Monitor Setup 3.0.51.exe mới nhất.' }
+    { property: 'og:title', content: 'Công ty công nghệ Đại Phúc' },
+    { property: 'og:description', content: 'Đại Phúc là doanh nghiệp chuyên cung cấp các giải pháp công nghệ thông tin, thiết bị mạng, phần cứng chuyên dụng.' }
   ],
   link: [
     { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
